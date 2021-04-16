@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
+  post "versions/:id/revert" =>"versions#revert", :as => "revert_version"
   resources :ponies
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -25,7 +25,7 @@ class PoniesController < ApplicationController
 
     respond_to do |format|
       if @pony.save
-        format.html { redirect_to @pony, notice: "Pony was successfully created." }
+        format.html { redirect_to @pony, notice: "Pony was successfully created. #{undo_link}" }
         format.json { render :show, status: :created, location: @pony }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +38,7 @@ class PoniesController < ApplicationController
   def update
     respond_to do |format|
       if @pony.update(pony_params)
-        format.html { redirect_to @pony, notice: "Pony was successfully updated." }
+        format.html { redirect_to @pony, notice: "Pony was successfully updated. #{undo_link}" }
         format.json { render :show, status: :ok, location: @pony }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -51,13 +51,17 @@ class PoniesController < ApplicationController
   def destroy
     @pony.destroy
     respond_to do |format|
-      format.html { redirect_to ponies_url, notice: "Pony was successfully destroyed." }
+      format.html { redirect_to ponies_url, notice: "Pony was successfully destroyed. #{undo_link}" }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def undo_link
+      view_context.link_to("undo", revert_version_path(@pony.versions.last), :method => :post)
+    end
+    
     def set_pony
       @pony = Pony.find(params[:id])
     end
